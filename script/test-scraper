@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+$:.push File.dirname(__FILE__) + '/../'
+
+require 'app/scrapers/arclight'
+Scrapers::Arclight.new.perform

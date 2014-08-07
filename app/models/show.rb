@@ -11,6 +11,7 @@ class Show < ActiveRecord::Base
     show = Show.new
     
     if rt = RottenTomatoes::RottenMovie.find(title: title, limit: 1)
+      rt = rt.first if rt.is_a?(Array)
       existing = where('rt_id = ? OR imdb_id = ?', rt.id, rt.alternate_ids.try(:imdb)).first
       return existing if existing
       

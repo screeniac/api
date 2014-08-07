@@ -19,7 +19,6 @@ module Scrapers
         
         movie[:screenings] = listing.search('.cached-seat-hover').map do |ticket_link|
           time = ActiveSupport::TimeZone.new('US/Pacific').local_to_utc(Chronic.parse(ticket_link['title']))
-          puts ticket_link['title'] + " - " + time.to_s
           
           {
             scraper_ref: ticket_link['data-locationid'],

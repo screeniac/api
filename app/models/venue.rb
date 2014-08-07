@@ -36,7 +36,7 @@ class Venue < ActiveRecord::Base
     expose :id, :name
     expose :lat, as: :latitude
     expose :lng, as: :longitude
-    expose :address_text, as: :address
+    expose :address, :city, :state, :zipcode
     expose :url, :places_url
   end
 end

@@ -10,8 +10,7 @@ class Show < ActiveRecord::Base
     
     show = Show.new
     
-    if rt = RottenTomatoes::RottenMovie.find(title: title, limit: 1)
-      rt = rt.first if rt.is_a?(Array)
+    if rt = Array(RottenTomatoes::RottenMovie.find(title: title, limit: 1)).first
       existing = where('rt_id = ? OR imdb_id = ?', rt.id, rt.alternate_ids.try(:imdb)).first
       return existing if existing
       
@@ -50,8 +49,8 @@ class Show < ActiveRecord::Base
     self.imdb_id = data.imdb_id
     self.summary = data.overview
     self.tagline = data.tagline
-    self.poster_url = [$tmdb_config['images']['secure_base_url'] + 'w500' + data.poster_path].join('/')
-    self.backdrop_url = [$tmdb_config['images']['secure_base_url'] + 'w780' + data.backdrop_path].join('/')
+    self.poster_url = '//image.tmdb.org/t/p/w500' + data.poster_path if data.poster_path
+    self.backdrop_url = '//image.tmdb.org/t/p/w780' + data.backdrop_path if data.backdrop_path
     
     self.title ||= data.title
     self.release_date ||= data.release_date

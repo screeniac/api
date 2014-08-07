@@ -50,7 +50,7 @@ class Show < ActiveRecord::Base
     self.summary = data.overview
     self.tagline = data.tagline
     self.poster_url = [$tmdb_config['images']['secure_base_url'] + 'w500' + data.poster_path].join('/')
-    self.backdrop_url = [$tmdb_config['images']['secure_base_url'] + 'w780' + data.poster_path].join('/')
+    self.backdrop_url = [$tmdb_config['images']['secure_base_url'] + 'w780' + data.backdrop_path].join('/')
     
     self.title ||= data.title
     self.release_date ||= data.release_date

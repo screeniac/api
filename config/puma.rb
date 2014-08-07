@@ -10,8 +10,8 @@ environment ENV['RACK_ENV'] || 'development'
 on_worker_boot do
   # worker specific setup
   ActiveSupport.on_load(:active_record) do
-    db_config = YAML.load_file('./db/config.yml')[ENV['RACK_ENV']] rescue nil
-    db_config['pool'] = ENV['MAX_THREADS'] || 16
-    ActiveRecord::Base.establish_connection(db_config)
+    config = YAML.load(ERB.new(File.read("#{File.dirname(__FILE__)}/database.yml")).result)[ENV['RACK_ENV']]
+    config['pool'] = ENV['MAX_THREADS'] || 16
+    ActiveRecord::Base.establish_connection(config)
   end
 end

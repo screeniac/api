@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'active_support/core_ext'
 
 module Scrapers
   class Arclight
@@ -15,19 +16,35 @@ module Scrapers
           image: listing.search('img').first['src']
         }
         
+        
         movie[:screenings] = listing.search('.cached-seat-hover').map do |ticket_link|
+          time = ActiveSupport::TimeZone.new('US/Pacific').local_to_utc(Chronic.parse(ticket_link['title']))
+          puts ticket_link['title'] + " - " + time.to_s
+          
           {
-            location: ticket_link['data-locationid'],
+            scraper_ref: ticket_link['data-locationid'],
             url: listing.search('.see-more-details-showtime a').first['href'],
             ticket_url: ticket_link['href'],
-            time: ticket_link['title']
+            time: time
           }
         end
         
         movies << movie
       end
       
-      movies.each{|s| puts s.inspect}
+      movies.each do |data|
+        show = Show.find_or_create_by_query(data[:title])
+        data[:screenings].each do |info|
+          venue = Venue.find_by_scraper_ref info[:scraper_ref]
+          event = Event.new(venue: venue, show: show, time: info[:time], url: info[:url], ticket_url: info[:ticket_url])
+          
+          if event.save
+            puts "- Added screening for #{show.title} at #{venue.name} (#{venue.city}) - #{event.time.in_time_zone('US/Pacific')}"
+          else
+            puts "- ERROR: #{event.errors.full_messages.join(", ")}"
+          end
+        end
+      end
     end
   end
 end

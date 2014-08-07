@@ -1,19 +1,26 @@
 class Show < ActiveRecord::Base
+  include Grape::Entity::DSL
+  
   has_many :events
   has_many :venues, through: :events
   
   def self.find_or_create_by_query(title)
-    return existing if existing = where('title LIKE ?', title).first
+    existing = where('title LIKE ?', title).first
+    return existing if existing
     
     show = Show.new
     
     if rt = RottenTomatoes::RottenMovie.find(title: title, limit: 1)
-      return existing if existing = where('rt_id = ? OR imdb_id = ?', rt.id, rt.alternate_ids.try(:imdb)).first
+      existing = where('rt_id = ? OR imdb_id = ?', rt.id, rt.alternate_ids.try(:imdb)).first
+      return existing if existing
+      
       show.assign_from_rotten_tomatoes(rt)
     end
     
     if tmdb = Tmdb::Movie.find(title).try(:first)
-      return existing if existing = where(tmdb_id: tmdb.id).first
+      existing = where(tmdb_id: tmdb.id).first
+      return existing if existing
+      
       tmdb = Tmdb::Movie.detail(tmdb.id)
       show.assign_from_tmdb(tmdb)
     end
@@ -42,10 +49,22 @@ class Show < ActiveRecord::Base
     self.imdb_id = data.imdb_id
     self.summary = data.overview
     self.tagline = data.tagline
-    self.poster_url = [$tmdb_config['images']['secure_base_url'] + 'w500/' + data.poster_path].join('/')
-    self.backdrop_url = [$tmdb_config['images']['secure_base_url'] + 'w780/' + data.poster_path].join('/')
+    self.poster_url = [$tmdb_config['images']['secure_base_url'] + 'w500' + data.poster_path].join('/')
+    self.backdrop_url = [$tmdb_config['images']['secure_base_url'] + 'w780' + data.poster_path].join('/')
     
     self.title ||= data.title
     self.release_date ||= data.release_date
+  end
+  
+  def year
+    release_date.year
+  end
+  
+  entity do
+    expose :id, :title, :year, :release_date, :runtime, :rating, :summary, :tagline
+    
+    expose(:images){|show| {poster: show.poster_url, backdrop: show.backdrop_url} }
+    expose(:scores){|show| {rotten_tomatoes: show.tomato_score, audience: show.audience_score} } 
+    expose(:external_ids){|show| {imdb: show.imdb_id, rotten_tomatoes: show.rt_id, tmdb: show.tmdb_id} }
   end
 end

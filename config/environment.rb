@@ -15,7 +15,7 @@ Dir[File.dirname(__FILE__) + "/initializers/*.rb"].each do |initializer|
 end
 
 require 'yaml'
-db_config = YAML.load_file('./db/config.yml')[ENV['RACK_ENV']] rescue nil
+db_config = YAML.load_file('./config/database.yml')[ENV['RACK_ENV']] rescue nil
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || db_config)
 
 require 'app/api'

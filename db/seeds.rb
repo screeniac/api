@@ -1,9 +1,9 @@
 [
-  ['arclight hollywood',             {scraper_ref: '1001'}],
-  ['arclight pasadena',              {scraper_ref: '1003'}],
-  ['arclight beach cities',          {scraper_ref: '1004'}],
-  ['arclight sherman oaks',          {scraper_ref: '1002'}],
-  ['arclight la jolla',              {scraper_ref: '1005'}],
+  ['arclight hollywood',             {name: 'ArcLight Cinemas', scraper_ref: '1001'}],
+  ['arclight pasadena',              {name: 'ArcLight Cinemas', scraper_ref: '1003'}],
+  ['arclight beach cities',          {name: 'ArcLight Cinemas', scraper_ref: '1004'}],
+  ['arclight sherman oaks',          {name: 'ArcLight Cinemas', scraper_ref: '1002', city: 'Sherman Oaks'}],
+  ['arclight la jolla',              {name: 'ArcLight Cinemas', scraper_ref: '1005'}],
   ['new beverly cinema los angeles', {}],
   ['nuart theater los angeles',      {}]
 ].each do |(query, attributes)|

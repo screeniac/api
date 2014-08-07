@@ -4,6 +4,7 @@ gem 'dotenv'
 gem 'puma'
 
 gem 'grape'
+gem 'rack-cors', require: 'rack/cors'
 
 gem 'upton'
 gem 'google_places', git: 'https://github.com/jimmykarily/google_places.git', ref: 'change_reference_to_place_id'
@@ -12,6 +13,8 @@ gem 'themoviedb'
 
 gem 'activesupport', require: 'active_support'
 gem 'activerecord', require: 'active_record'
+gem 'grape-entity'
+gem 'chronic'
 
 gem 'racksh'
 gem 'rake'

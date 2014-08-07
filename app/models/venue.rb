@@ -1,4 +1,6 @@
 class Venue < ActiveRecord::Base
+  include Grape::Entity::DSL
+  
   has_many :events
   has_many :shows, through: :events
   
@@ -24,5 +26,17 @@ class Venue < ActiveRecord::Base
     self.places_url = spot.url
     self.url = spot.website
     self
+  end
+  
+  def address_text
+    "#{address}, #{city}, #{state} #{zipcode}".strip
+  end
+  
+  entity do
+    expose :id, :name
+    expose :lat, as: :latitude
+    expose :lng, as: :longitude
+    expose :address_text, as: :address
+    expose :url, :places_url
   end
 end

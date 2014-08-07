@@ -18,10 +18,10 @@ class Show < ActiveRecord::Base
     end
     
     if tmdb = Tmdb::Movie.find(title).try(:first)
-      existing = where(tmdb_id: tmdb.id).first
+      existing = where(tmdb_id: tmdb.id.to_s).first
       return existing if existing
       
-      tmdb = Tmdb::Movie.detail(tmdb.id)
+      tmdb = Tmdb::Movie.detail(tmdb.id.to_s)
       show.assign_from_tmdb(tmdb)
     end
     
@@ -45,7 +45,7 @@ class Show < ActiveRecord::Base
   end
   
   def assign_from_tmdb(data)
-    self.tmdb_id = data.id
+    self.tmdb_id = data.id.to_s
     self.imdb_id = data.imdb_id
     self.summary = data.overview
     self.tagline = data.tagline

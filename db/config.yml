@@ -10,5 +10,4 @@ test:
   pool: 5
   timeout: 5000
   
-production:
-  url: <%= ENV['DATABASE_URL'] %>
+production: "<%= ENV['DATABASE_URL'] %>"

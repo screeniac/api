@@ -57,7 +57,7 @@ class Show < ActiveRecord::Base
   end
   
   def year
-    release_date.year
+    release_date.try(:year)
   end
   
   entity do

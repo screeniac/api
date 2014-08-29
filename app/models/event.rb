@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
   belongs_to :show
   belongs_to :venue
   
+  # Try to prevent the same screenings from being created multiple times
   validates_uniqueness_of :time, scope: [:show_id, :venue_id]
   
   def self.upcoming

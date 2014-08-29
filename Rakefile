@@ -3,10 +3,18 @@ task :environment do
 end
 
 namespace :scrape do
-  task :all => [:arclight]
+  task :all => [:arclight, :nuart]
   
   task :arclight => :environment do
+    puts
+    puts "==== SCRAPING ARCLIGHT THEATER SITE"
     Scrapers::Arclight.new.perform
+  end
+  
+  task :nuart => :environment do
+    puts
+    puts "==== SCRAPING NUART THEATER SITE"
+    Scrapers::Nuart.new.perform
   end
 end
 

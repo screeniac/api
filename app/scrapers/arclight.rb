@@ -40,7 +40,7 @@ module Scrapers
           if event.save
             puts "- Added screening for #{show.title} at #{venue.name} (#{venue.city}) - #{event.time.in_time_zone('US/Pacific')}"
           else
-            puts "- ERROR: #{event.errors.full_messages.join(", ")}"
+            puts "- NOT SAVED: \"#{show.title}\" (#{event.errors.full_messages.join(", ")})"
           end
         end
       end

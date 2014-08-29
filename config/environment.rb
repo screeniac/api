@@ -25,3 +25,4 @@ require 'app/models/venue'
 require 'app/models/event'
 
 require 'app/scrapers/arclight'
+require 'app/scrapers/nuart'

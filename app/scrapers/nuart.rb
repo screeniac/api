@@ -7,7 +7,7 @@ module Scrapers
       date = Date.today.friday?? Date.today : Chronic.parse('friday').to_date
       while true
         doc = load_date(date)
-        ticket_link = doc.search("a[text()='11:59']").first
+        ticket_link = doc.search("a[text()^='11:5']").first
         unless ticket_link
           "*** No showtimes found for #{date}"
           break
